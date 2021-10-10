@@ -14,7 +14,8 @@ namespace AvalonCode
 
         public override void OnFrameworkInitializationCompleted()
         {
-            RxApplication.Create<Shell.MainWindow>(this)
+            RxApplicationBuilder<Shell.MainWindow>
+                .Create(this)
                 .Run();
 
             base.OnFrameworkInitializationCompleted();
