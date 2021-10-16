@@ -12,10 +12,9 @@ namespace AvalonCode.Shell.Components
         public override VisualNode Render()
         {
             return new RxTabControl()
-            {
-                new RxTabItem("Document1"),
-                new RxTabItem("Document2")
-            };
+                .Items(new[] { "Docu1", "Docu2" })
+                .OnRenderItem<RxTabControl, string>(_ => new RxTextBlock(_));
+            ;
         }
     }
 }

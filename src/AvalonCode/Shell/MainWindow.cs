@@ -1,5 +1,7 @@
 ﻿using AvalonCode.Shell.Components;
+using Avalonia.Controls;
 using AvaloniaReactorUI;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +15,22 @@ namespace AvalonCode.Shell
     
     }
 
+    public class ApplicationParameters
+    { 
+        public AdhocWorkspace? Workspace { get; set; }
+
+        public string? StatusMessage { get; set; }
+    }
+
     public class MainWindow : RxComponent<MainWindowState>
     {
+        private readonly IParameter<ApplicationParameters> _applicationParameters;
+
+        public MainWindow()
+        {
+            _applicationParameters = CreateParameter<ApplicationParameters>();
+        }
+
         public override VisualNode Render() =>
             new RxWindow()
             {

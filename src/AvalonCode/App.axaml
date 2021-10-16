@@ -8,8 +8,6 @@
 
       <Style>
         <Style.Resources>
-          <FontFamily x:Key="UiFont">avares://AvalonStudio.Shell/Assets#Ubuntu</FontFamily>
-          <FontFamily x:Key="EditorFont">avares://AvalonStudio.Shell/Assets#DejaVu Sans Mono</FontFamily>
 
           <Color x:Key="ThemeAccentColor">#CC007ACC</Color>
           <Color x:Key="ThemeAccentColor2">#99007ACC</Color>

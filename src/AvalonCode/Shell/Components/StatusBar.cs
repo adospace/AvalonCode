@@ -11,7 +11,9 @@ namespace AvalonCode.Shell.Components
     {
         public override VisualNode Render()
         {
-            return new RxTextBlock().Text("StatusBar");
+            var applicationParameters = GetParameter<ApplicationParameters>();
+
+            return new RxTextBlock().Text(applicationParameters.Value.StatusMessage ?? string.Empty);
         }
     }
 }
