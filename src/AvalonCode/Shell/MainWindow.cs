@@ -1,7 +1,7 @@
-﻿using AvalonCode.Shell.Components;
+﻿using AvalonCode.Services.Models;
+using AvalonCode.Shell.Components;
 using Avalonia.Controls;
 using AvaloniaReactorUI;
-using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace AvalonCode.Shell
 
     public class ApplicationParameters
     { 
-        public AdhocWorkspace? Workspace { get; set; }
+        public SolutionInfo? Solution { get; set; }
 
         public string? StatusMessage { get; set; }
     }

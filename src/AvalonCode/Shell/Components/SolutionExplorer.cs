@@ -1,5 +1,5 @@
-﻿using AvaloniaReactorUI;
-using Microsoft.CodeAnalysis;
+﻿using AvalonCode.Services.Models;
+using AvaloniaReactorUI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +9,21 @@ using System.Threading.Tasks;
 
 namespace AvalonCode.Shell.Components
 {
+    //public class ProjectFolder
+    //{
+    //    public ProjectFolder(string name, Document[] documents, int index = 0)
+    //    {
+    //        Name = name;
+    //        Documents = documents;
+    //        Index = index;
+    //    }
+
+    //    public string Name { get; }
+    //    public Document[] Documents { get; }
+    //    public int Index { get; }
+
+    //}
+
     public class SolutionExplorer : RxComponent
     {
         public override VisualNode Render()
@@ -19,52 +34,57 @@ namespace AvalonCode.Shell.Components
             {
                 new RxTextBlock().Text("Solution Explorer"),
 
-                applicationParameters.Value.Workspace == null ?
+                applicationParameters.Value.Solution == null ?
                 null
                 :
                 new RxTreeView()
-                    .Items(applicationParameters.Value.Workspace.CurrentSolution.Projects)
-                    .OnRenderTreeItem<RxTreeView, object>(RenderSolutionItem, _ => GetChildrenOfItem(_))
+                    .Items(applicationParameters.Value.Solution.Children)
+                    .OnRenderTreeItem<RxTreeView, SolutionItem>(RenderSolutionItem, _ => _)
                     .GridRow(1)
             }
             .Rows("Auto,*");                
         }
 
-        private IEnumerable GetChildrenOfItem(object item)
+        private VisualNode RenderSolutionItem(SolutionItem item)
         {
-            if (item is Project project)
+            if (item is ProjectItem project)
             {
-                foreach (var childItem in project.Documents)
-                {
-                    yield return childItem;
-                }
+                return RenderItem(project);
             }
+            if (item is DocumentItem document)
+            {
+                return RenderItem(document);
+            }
+            if (item is SolutionFolderItem solutionFolder)
+            {
+                return RenderItem(solutionFolder);
+            }
+            if (item is ProjectFolderItem projectFolder)
+            {
+                return RenderItem(projectFolder);
+            }
+
+
+
+            return new RxTextBlock(item.Name);
         }
 
-        private VisualNode RenderSolutionItem(object item)
-        {
-            if (item is Project project)
-            {
-                return RenderProjectItem(project);
-            }
-            if (item is Document document)
-            {
-                return RenderProjectItem(document);
-            }
-
-
-
-            return null;
-        }
-
-        private VisualNode RenderProjectItem(Project project)
+        private VisualNode RenderItem(ProjectItem project)
         {
             return new RxTextBlock(project.Name);
         }
 
-        private VisualNode RenderProjectItem(Document document)
+        private VisualNode RenderItem(DocumentItem document)
         {
             return new RxTextBlock(document.Name);
+        }
+        private VisualNode RenderItem(SolutionFolderItem solutionFolder)
+        {
+            return new RxTextBlock(solutionFolder.Name);
+        }
+        private VisualNode RenderItem(ProjectFolderItem projectFolder)
+        {
+            return new RxTextBlock(projectFolder.Name);
         }
     }
 }

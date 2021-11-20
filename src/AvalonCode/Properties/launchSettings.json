@@ -2,7 +2,7 @@
   "profiles": {
     "AvalonCode": {
       "commandName": "Executable",
-      "executablePath": "C:\\Source\\github\\AvalonCode\\src\\AvalonCode\\bin\\Debug\\net5.0\\AvaloniaReactorUI.Host.exe",
+      "executablePath": "C:\\Source\\github\\AvalonCode\\src\\AvalonCode\\bin\\Debug\\net6.0\\AvaloniaReactorUI.Host.exe",
       "commandLineArgs": "AvalonCode.dll"
     }
   }

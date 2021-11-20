@@ -1,9 +1,11 @@
-﻿using Avalonia.Controls;
+﻿using AvalonCode.Services;
+using AvalonCode.Services.Models;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using AvaloniaReactorUI;
-using Buildalyzer;
-using Buildalyzer.Workspaces;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.MSBuild;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,18 +51,24 @@ namespace AvalonCode.Shell.Components
 
             if (selectedFile != null)
             {
-                AnalyzerManager manager = new(selectedFile);
+                applicationParameters.Set(_ => _.StatusMessage = $"Loading {selectedFile}...");
 
-                //IProjectAnalyzer analyzer = manager.Projects.First().Value;
-                AdhocWorkspace workspace = new();
+                var solutionExplorer = App.Services.GetRequiredService<ISolutionExplorer>();
 
-                foreach (var project in manager.Projects)
+                var solutionInfo = await solutionExplorer.OpenSolution(selectedFile);
+
+                foreach (var project in solutionInfo.Descendents().OfType<ProjectItem>())
                 {
-                    applicationParameters.Set(_ => _.StatusMessage = $"Loading {project.Value.ProjectFile.Path}...");
-                    project.Value.AddToWorkspace(workspace);
+                    applicationParameters.Set(_ => _.StatusMessage = $"Loading {project.FileName}...");
+
+                    await project.Load();
                 }
 
-                applicationParameters.Set(_ => _.Workspace = workspace);
+                applicationParameters.Set(_ =>
+                {
+                    _.Solution = solutionInfo;
+                    _.StatusMessage = string.Empty;
+                });
             }
         }
 
