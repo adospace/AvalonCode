@@ -1,4 +1,5 @@
-﻿using AvalonCode.Services.Models;
+﻿using AvalonCode.Services;
+using AvalonCode.Services.Models;
 using AvalonCode.Shell.Components;
 using Avalonia.Controls;
 using AvaloniaReactorUI;
@@ -20,6 +21,10 @@ namespace AvalonCode.Shell
         public SolutionInfo? Solution { get; set; }
 
         public string? StatusMessage { get; set; }
+
+        public List<IDocumentItem> Documents { get; set; } = new();
+
+        public IDocumentItem? CurrentDocument { get; set; }
     }
 
     public class MainWindow : RxComponent<MainWindowState>

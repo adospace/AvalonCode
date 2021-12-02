@@ -45,7 +45,7 @@ namespace AvalonCode.Shell.Components
             var applicationParameters = GetParameter<ApplicationParameters>();
             var applicationLifeTime = App.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
 
-            var selectedFiles = await dialog.ShowAsync(applicationLifeTime?.MainWindow ?? throw new InvalidOperationException());
+            var selectedFiles = await dialog.ShowAsync(applicationLifeTime?.MainWindow ?? throw new InvalidOperationException()) ?? throw new InvalidOperationException();
 
             var selectedFile = selectedFiles.FirstOrDefault();
 

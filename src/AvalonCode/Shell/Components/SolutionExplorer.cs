@@ -1,4 +1,5 @@
 ﻿using AvalonCode.Services.Models;
+using Avalonia.Media;
 using AvaloniaReactorUI;
 using System;
 using System.Collections;
@@ -76,7 +77,9 @@ namespace AvalonCode.Shell.Components
 
         private VisualNode RenderItem(DocumentItem document)
         {
-            return new RxTextBlock(document.Name);
+            return new RxTextBlock(document.Name)
+                .Background(Brushes.Transparent)
+                .OnDoubleTapped(()=>OnItemActivated(document));
         }
         private VisualNode RenderItem(SolutionFolderItem solutionFolder)
         {
@@ -86,5 +89,23 @@ namespace AvalonCode.Shell.Components
         {
             return new RxTextBlock(projectFolder.Name);
         }
+        private void OnItemActivated(DocumentItem document)
+        {
+            var applicationParameters = GetParameter<ApplicationParameters>();
+
+            applicationParameters.Set(_ =>
+            {
+                var existingDocument = _.Documents.FirstOrDefault(_ => _.Id == document.Id);
+                
+                if (existingDocument == null)
+                {
+                    _.Documents.Add(existingDocument = document);
+                }
+
+                _.CurrentDocument = existingDocument;
+            });
+
+        }
+
     }
 }
