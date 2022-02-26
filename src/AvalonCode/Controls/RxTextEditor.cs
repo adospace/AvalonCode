@@ -91,7 +91,7 @@ namespace AvalonCode.Controls
             Validate.EnsureNotNull(NativeControl);
             var thisAsIRxTextEditor = (IRxTextEditor)this;
             NativeControl.Set(TextEditor.DocumentProperty, thisAsIRxTextEditor.Document);
-            NativeControl.Set(TextEditor.OptionsProperty, thisAsIRxTextEditor.Options);
+            //NativeControl.Set(TextEditor.OptionsProperty, thisAsIRxTextEditor.Options);
             NativeControl.Set(TextEditor.SyntaxHighlightingProperty, thisAsIRxTextEditor.SyntaxHighlighting);
             NativeControl.Set(TextEditor.WordWrapProperty, thisAsIRxTextEditor.WordWrap);
             NativeControl.Set(TextEditor.IsReadOnlyProperty, thisAsIRxTextEditor.IsReadOnly);

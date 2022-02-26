@@ -22,9 +22,9 @@ namespace AvalonCode.Shell
 
         public string? StatusMessage { get; set; }
 
-        public List<IDocumentItem> Documents { get; set; } = new();
+        public List<ILoadedDocumentItem> LoadedDocuments { get; set; } = new();
 
-        public IDocumentItem? CurrentDocument { get; set; }
+        public ILoadedDocumentItem? CurrentLoadedDocument { get; set; }
     }
 
     public class MainWindow : RxComponent<MainWindowState>

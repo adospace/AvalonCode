@@ -89,22 +89,24 @@ namespace AvalonCode.Shell.Components
         {
             return new RxTextBlock(projectFolder.Name);
         }
-        private void OnItemActivated(DocumentItem document)
+        private async void OnItemActivated(DocumentItem document)
         {
             var applicationParameters = GetParameter<ApplicationParameters>();
+            var existingDocument = applicationParameters.Value.LoadedDocuments.FirstOrDefault(_ => _.DocumentItem.Id == document.Id);
+
+            if (existingDocument == null)
+            {
+                applicationParameters.Set(_ => _.StatusMessage = $"Loading {document.Document.FilePath}...");
+                existingDocument = await document.Load();
+                applicationParameters.Value.LoadedDocuments.Add(existingDocument);
+            }
 
             applicationParameters.Set(_ =>
             {
-                var existingDocument = _.Documents.FirstOrDefault(_ => _.Id == document.Id);
-                
-                if (existingDocument == null)
-                {
-                    _.Documents.Add(existingDocument = document);
-                }
-
-                _.CurrentDocument = existingDocument;
+                _.CurrentLoadedDocument = existingDocument;
+                _.CurrentLoadedDocument.LastActivation = DateTime.Now;
+                _.StatusMessage = null;
             });
-
         }
 
     }

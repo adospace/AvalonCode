@@ -18,5 +18,13 @@ namespace AvalonCode.Services.Models
         public Document Document { get; }
 
         public Guid Id => Document.Id.Id;
+
+        public async Task<ILoadedDocumentItem> Load(CancellationToken cancellationToken = default)
+        { 
+            var filePath = Document.FilePath ?? throw new InvalidOperationException();
+            var source = await File.ReadAllTextAsync(filePath, cancellationToken);
+
+            return new Implementation.LoadedDocumentItem(this, source);
+        }
     }
 }

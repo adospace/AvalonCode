@@ -5,9 +5,13 @@
     <Application.Styles>
       <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
       <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml"/>
+      <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
+
 
       <Style>
         <Style.Resources>
+          <FontFamily x:Key="EditorCodeFont">avares://AvalonCode/Assets#Cascadia Code</FontFamily>
+          <FontFamily x:Key="EditorMonoFont">avares://AvalonCode/Assets#Cascadia Mono</FontFamily>
 
           <Color x:Key="ThemeAccentColor">#CC007ACC</Color>
           <Color x:Key="ThemeAccentColor2">#99007ACC</Color>

@@ -14,5 +14,7 @@ namespace AvalonCode.Services
         Guid Id { get; }
 
         Document Document { get; }
+
+        Task<ILoadedDocumentItem> Load(CancellationToken cancellationToken = default);
     }
 }
