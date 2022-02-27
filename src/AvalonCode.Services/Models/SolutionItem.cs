@@ -2,7 +2,7 @@
 
 namespace AvalonCode.Services.Models
 {
-    public abstract class SolutionItem : IReadOnlyList<SolutionItem>
+    public abstract class SolutionItem : IReadOnlyList<ISolutionItem>, ISolutionItem
     {
         protected SolutionItem(string name)
         {
@@ -11,23 +11,23 @@ namespace AvalonCode.Services.Models
 
         public string Name { get; }
 
-        public SolutionItem? Parent { get; private set; }
+        public ISolutionItem? Parent { get; private set; }
 
-        private readonly List<SolutionItem> _children = new();
+        private readonly List<ISolutionItem> _children = new();
 
-        public IReadOnlyList<SolutionItem> Children => _children;
+        public IReadOnlyList<ISolutionItem> Children => _children;
 
         public int Count => _children.Count;
 
-        public SolutionItem this[int index] => _children[index];
+        public ISolutionItem this[int index] => _children[index];
 
-        public SolutionItem? this[string name] => _children.FirstOrDefault(x => x.Name == name);
+        public ISolutionItem? this[string name] => _children.FirstOrDefault(x => x.Name == name);
 
         public void AddChild(SolutionItem item)
         {
-            if (item.Parent != null)
-            { 
-                item.Parent.RemoveChild(item);
+            if (item.Parent is SolutionItem solutionItem)
+            {
+                solutionItem.RemoveChild(item);
             }
 
             _children.Add(item);
@@ -36,13 +36,13 @@ namespace AvalonCode.Services.Models
         }
 
         public void RemoveChild(SolutionItem item)
-        { 
+        {
             _children.Remove(item);
 
             item.Parent = null;
         }
 
-        public IEnumerator<SolutionItem> GetEnumerator()
+        public IEnumerator<ISolutionItem> GetEnumerator()
         {
             return _children.GetEnumerator();
         }
@@ -52,7 +52,7 @@ namespace AvalonCode.Services.Models
             return GetEnumerator();
         }
 
-        public IEnumerable<SolutionItem> Descendents()
+        public IEnumerable<ISolutionItem> Descendents()
         {
             foreach (var item in _children)
             {
@@ -61,6 +61,19 @@ namespace AvalonCode.Services.Models
 
                 yield return item;
             }
+        }
+
+        public T? GetParent<T>()
+        {
+            var parent = Parent;
+            while (parent != null)
+            {
+                if (parent is T parentAsT)
+                    return parentAsT;
+                parent = parent.Parent;
+            }
+
+            return default;
         }
     }
 }

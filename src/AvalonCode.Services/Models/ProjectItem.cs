@@ -38,7 +38,7 @@ namespace AvalonCode.Services.Models
 
             static SolutionFolderItem GetOrCreateFolder(SolutionItem parent, string[] folders)
             {
-                var folder = parent[folders[0]];
+                var folder = (SolutionItem)parent[folders[0]]!;
                 if (folder == null)
                 {
                     parent.AddChild(folder = new SolutionFolderItem(folders[0]));

@@ -18,7 +18,7 @@ namespace AvalonCode.Shell
 
     public class ApplicationParameters
     { 
-        public SolutionInfo? Solution { get; set; }
+        public SolutionHost? Solution { get; set; }
 
         public string? StatusMessage { get; set; }
 

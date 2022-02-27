@@ -1,9 +1,11 @@
 {
   "profiles": {
-    "AvalonCode": {
-      "commandName": "Executable",
-      "executablePath": "C:\\Source\\github\\AvalonCode\\src\\AvalonCode\\bin\\Debug\\net6.0\\AvaloniaReactorUI.Host.exe",
-      "commandLineArgs": "AvalonCode.dll"
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "Default Profile": {
+      "commandName": "Project"
     }
   }
 }

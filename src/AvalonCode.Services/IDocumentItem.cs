@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace AvalonCode.Services
 {
-    public interface IDocumentItem
+    public interface IDocumentItem : ISolutionItem
     {
-        string Name { get; }
-
         Guid Id { get; }
 
         Document Document { get; }

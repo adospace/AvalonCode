@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.MSBuild;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,21 +11,19 @@ namespace AvalonCode.Services.Implementation
 {
     internal class SolutionExplorer : ISolutionExplorer
     {
-        public SolutionInfo? CurrentSolution { get; private set; }
+        public SolutionHost? CurrentSolution { get; private set; }
 
-        public async Task<SolutionInfo> OpenSolution(string solutionFilePath, CancellationToken cancellationToken = default)
+        public async Task<SolutionHost> OpenSolution(string solutionFilePath, IEnumerable<Assembly>? additionalAssemblies = null, CancellationToken cancellationToken = default)
         {
             await CloseSolution();
 
             var workspace = MSBuildWorkspace.Create();
 
             await workspace.OpenSolutionAsync(solutionFilePath, cancellationToken: cancellationToken);
-            //applicationParameters.Set(_ => _.StatusMessage = $"Loading {selectedFile}...");
-            //var solution = await workspace.OpenSolutionAsync(selectedFile);
 
             var solutionFile = Microsoft.Build.Construction.SolutionFile.Parse(solutionFilePath);
 
-            var solutionInfo = new SolutionInfo(Path.GetFileNameWithoutExtension(solutionFilePath), solutionFilePath, workspace);
+            var solutionInfo = new SolutionHost(workspace, additionalAssemblies);
 
             var solutionItemsDictionary = solutionFile.ProjectsInOrder
                 .ToDictionary(_=>_.ProjectGuid, _ =>

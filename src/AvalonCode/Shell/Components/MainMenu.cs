@@ -6,9 +6,13 @@ using AvaloniaReactorUI;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.DependencyInjection;
+using RoslynPad.Editor;
+using RoslynPad.Roslyn.QuickInfo;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,6 +36,10 @@ namespace AvalonCode.Shell.Components
                 }
             };
         }
+        protected virtual ImmutableArray<Assembly> CompositionAssemblies => ImmutableArray.Create(
+            typeof(App).Assembly, 
+            typeof(DeferredQuickInfoContentProvider).Assembly,
+            typeof(SnippetInfoService).Assembly);
 
         private async void OnOpenSolution()
         {
@@ -45,7 +53,12 @@ namespace AvalonCode.Shell.Components
             var applicationParameters = GetParameter<ApplicationParameters>();
             var applicationLifeTime = App.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
 
-            var selectedFiles = await dialog.ShowAsync(applicationLifeTime?.MainWindow ?? throw new InvalidOperationException()) ?? throw new InvalidOperationException();
+            var selectedFiles = await dialog.ShowAsync(applicationLifeTime?.MainWindow ?? throw new InvalidOperationException());
+
+            if (selectedFiles == null)
+            {
+                return;
+            }
 
             var selectedFile = selectedFiles.FirstOrDefault();
 
@@ -55,7 +68,7 @@ namespace AvalonCode.Shell.Components
 
                 var solutionExplorer = App.Services.GetRequiredService<ISolutionExplorer>();
 
-                var solutionInfo = await solutionExplorer.OpenSolution(selectedFile);
+                var solutionInfo = await solutionExplorer.OpenSolution(selectedFile, CompositionAssemblies); // new[] { typeof(MarkerMargin).Assembly }
 
                 foreach (var project in solutionInfo.Descendents().OfType<ProjectItem>())
                 {

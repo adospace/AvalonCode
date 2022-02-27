@@ -1,12 +1,13 @@
 ﻿using AvalonCode.Services.Models;
+using System.Reflection;
 
 namespace AvalonCode.Services
 {
     public interface ISolutionExplorer
     {
-        SolutionInfo? CurrentSolution { get; }
+        SolutionHost? CurrentSolution { get; }
 
-        Task<SolutionInfo> OpenSolution(string solutionFilePath, CancellationToken cancellationToken = default);
+        Task<SolutionHost> OpenSolution(string solutionFilePath, IEnumerable<Assembly>? additionalAssemblies = null, CancellationToken cancellationToken = default);
 
         Task CloseSolution();
     }

@@ -1,4 +1,5 @@
 ﻿using AvalonCode.Controls;
+using AvalonCode.Controls.Native;
 using AvalonCode.Services;
 using AvalonCode.Services.Models;
 using Avalonia.Controls;
@@ -6,6 +7,7 @@ using Avalonia.Media;
 using AvaloniaEdit;
 using AvaloniaEdit.Highlighting;
 using AvaloniaReactorUI;
+using RoslynPad.Editor;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,19 +18,9 @@ using System.Threading.Tasks;
 
 namespace AvalonCode.Shell.Components
 {
-    //public class DocumentTab
-    //{
-    //    public DocumentTab(IDocument document)
-    //    {
-    //        Document = document;
-    //    }
-
-    //    public IDocument Document { get; }
-    //}
-
     public class CodeTabs : RxComponent
     {
-        private TextEditor? _textEditor;
+        private RoslynDocumentEditor? _textEditor;
 
         public override VisualNode Render()
         {
@@ -46,20 +38,21 @@ namespace AvalonCode.Shell.Components
                     .Orientation(Avalonia.Layout.Orientation.Horizontal)
                 },
                 applicationParameters.Value.CurrentLoadedDocument == null ? null :
-                new RxTextEditor(r => _textEditor = r)
-                    .Document(LoadTextEditorDocument(applicationParameters.Value.CurrentLoadedDocument))
-                    .SyntaxHighlighting(HighlightingManager.Instance.GetDefinitionByExtension(
-                        Path.GetExtension(applicationParameters.Value.CurrentLoadedDocument.DocumentItem.Document.FilePath)))
+                new RxRoslynDocumentEditor(r => _textEditor = r)
+                    .LoadedDocument(applicationParameters.Value.CurrentLoadedDocument)
+                    
+                    //.SyntaxHighlighting(HighlightingManager.Instance.GetDefinitionByExtension(
+                    //    Path.GetExtension(applicationParameters.Value.CurrentLoadedDocument.DocumentItem.Document.FilePath)))
                     .FontFamily(new FontFamily("avares://AvalonCode/Assets#Cascadia Code"))
                     .FontSize(14)
                     .GridRow(1)
             };
         }
 
-        private AvaloniaEdit.Document.TextDocument LoadTextEditorDocument(ILoadedDocumentItem currentDocument)
-        {
-            return new AvaloniaEdit.Document.TextDocument(currentDocument.SourceCode);
-        }
+        //private AvaloniaEdit.Document.TextDocument LoadTextEditorDocument(ILoadedDocumentItem currentDocument)
+        //{
+        //    return new AvaloniaEdit.Document.TextDocument(currentDocument.SourceCode);
+        //}
 
         private VisualNode RenderDocumentTitle(ILoadedDocumentItem document)
         {
