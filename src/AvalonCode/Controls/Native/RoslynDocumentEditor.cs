@@ -88,19 +88,18 @@ namespace AvalonCode.Controls.Native
         {
             _roslynHost = loadedDocumentItem.DocumentItem.GetParent<IRoslynHost>() ?? throw new InvalidOperationException();
 
-            _braceMatcherHighlighter = new BraceMatcherHighlightRenderer(TextArea.TextView, _classificationHighlightColors);
+            _braceMatcherHighlighter ??= new BraceMatcherHighlightRenderer(TextArea.TextView, _classificationHighlightColors);
 
             _quickInfoProvider = _roslynHost.GetService<IQuickInfoProvider>();
             _braceMatchingService = _roslynHost.GetService<IBraceMatchingService>();
 
-            var avalonEditTextContainer = new AvalonEditTextContainer(Document) { Editor = this };
+            //var avalonEditTextContainer = new AvalonEditTextContainer(Document) { Editor = this };
 
             _documentId = loadedDocumentItem.DocumentItem.Document.Id;
 
             Document.Remove(0, Document.TextLength);
             AppendText(loadedDocumentItem.SourceCode);
             Document.UndoStack.ClearAll();
-            //ocument = new AvaloniaEdit.Document.TextDocument(loadedDocumentItem.SourceCode);
             AsyncToolTipRequest = OnAsyncToolTipRequest;
 
             RefreshHighlighting();

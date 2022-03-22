@@ -24,6 +24,7 @@ namespace AvalonCode.Services.Models
             var filePath = Document.FilePath ?? throw new InvalidOperationException();
             var source = await File.ReadAllTextAsync(filePath, cancellationToken);
 
+
             return new Implementation.LoadedDocumentItem(this, source);
         }
     }
